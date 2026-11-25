@@ -1,0 +1,340 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SkyCast | Weather Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- AUTH PAGE -->
+  <section id="authPage" class="auth-page">
+    <div class="auth-left">
+      <div class="brand">
+        <span class="brand-icon">☁</span>
+        <span>SkyCast</span>
+      </div>
+
+      <div class="auth-hero">
+        <span class="eyebrow">YOUR WEATHER. YOUR WORLD.</span>
+        <h1>Weather that<br>moves with you.</h1>
+        <p>Explore the weather around the world with a simple, beautiful experience.</p>
+        <div class="auth-weather">
+          <span>☀️</span>
+          <div>
+            <strong>Beautifully simple weather</strong>
+            <small>Powered by Open-Meteo</small>
+          </div>
+        </div>
+      </div>
+
+      <div class="auth-footer">© 2026 SkyCast Weather</div>
+    </div>
+
+    <div class="auth-right">
+      <div class="auth-card">
+        <div class="auth-mobile-brand brand">
+          <span class="brand-icon">☁</span>
+          <span>SkyCast</span>
+        </div>
+
+        <div id="loginForm">
+          <div class="form-heading">
+            <span class="eyebrow">WELCOME BACK</span>
+            <h2>Sign in</h2>
+            <p>Enter your details to continue.</p>
+          </div>
+
+          <label>Email address</label>
+          <input id="loginEmail" type="email" placeholder="you@example.com">
+
+          <label>Password</label>
+          <input id="loginPassword" type="password" placeholder="Enter your password">
+
+          <button class="primary-btn" onclick="login()">Sign In <span>→</span></button>
+
+          <p id="loginMessage" class="message"></p>
+
+          <div class="auth-switch">
+            Don't have an account?
+            <a onclick="showSignup()">Create account</a>
+          </div>
+        </div>
+
+        <div id="signupForm" class="hidden">
+          <div class="form-heading">
+            <span class="eyebrow">GET STARTED</span>
+            <h2>Create account</h2>
+            <p>Join SkyCast today.</p>
+          </div>
+
+          <label>Full name</label>
+          <input id="signupName" type="text" placeholder="Your name">
+
+          <label>Email address</label>
+          <input id="signupEmail" type="email" placeholder="you@example.com">
+
+          <label>Password</label>
+          <input id="signupPassword" type="password" placeholder="At least 6 characters">
+
+          <button class="primary-btn" onclick="signup()">Create Account <span>→</span></button>
+
+          <p id="signupMessage" class="message"></p>
+
+          <div class="auth-switch">
+            Already have an account?
+            <a onclick="showLogin()">Sign in</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- WEATHER APP -->
+  <section id="weatherPage" class="hidden app-page">
+    <header class="navbar">
+      <div class="brand">
+        <span class="brand-icon">☁</span>
+        <span>SkyCast</span>
+      </div>
+
+      <nav>
+        <a class="nav-active">Dashboard</a>
+      </nav>
+
+      <div class="nav-user">
+        <div class="user-avatar" id="userAvatar">U</div>
+        <span id="userName">User</span>
+        <button class="logout-btn" onclick="logout()">Logout</button>
+      </div>
+    </header>
+
+    <main class="dashboard">
+      <div class="welcome-row">
+        <div>
+          <span class="eyebrow">WEATHER OVERVIEW</span>
+          <h1>Good day, <span id="welcomeName">there</span> 👋</h1>
+          <p>Here's what's happening with the weather today.</p>
+        </div>
+        <div class="date-badge" id="todayDate"></div>
+      </div>
+
+      <div class="search-box">
+        <span>⌕</span>
+        <input id="cityInput" type="text" placeholder="Search city...">
+        <button onclick="searchWeather()">Search</button>
+      </div>
+
+      <p id="weatherMessage" class="weather-message"></p>
+
+      <section class="weather-grid">
+        <!-- MAIN WEATHER -->
+        <div class="weather-hero card">
+          <div class="hero-top">
+            <div>
+              <span class="eyebrow">CURRENT WEATHER</span>
+              <h2 id="cityName">Loading city...</h2>
+              <p id="weatherCondition">Fetching weather</p>
+            </div>
+            <div id="weatherIcon" class="weather-icon">☀️</div>
+          </div>
+
+          <div class="temperature">
+            <span id="temperature">--</span><span class="degree">°C</span>
+          </div>
+
+          <p class="feels-like">Feels like <span id="feelsLike">--</span>°C</p>
+
+          <div class="hero-bottom">
+            <div>
+              <span>☀️</span>
+              <small>Sunrise</small>
+              <strong id="sunrise">--:--</strong>
+            </div>
+            <div>
+              <span>🌙</span>
+              <small>Sunset</small>
+              <strong id="sunset">--:--</strong>
+            </div>
+            <div>
+              <span>📅</span>
+              <small>Today</small>
+              <strong id="heroDate">--</strong>
+            </div>
+          </div>
+        </div>
+
+        <!-- WEATHER DETAILS -->
+        <div class="details-card card">
+          <div class="section-heading">
+            <div>
+              <span class="eyebrow">CONDITIONS</span>
+              <h3>Weather Details</h3>
+            </div>
+          </div>
+
+          <div class="details-grid">
+            <div class="detail-item">
+              <div class="detail-icon">💧</div>
+              <div>
+                <small>Humidity</small>
+                <strong id="humidity">--%</strong>
+              </div>
+            </div>
+
+            <div class="detail-item">
+              <div class="detail-icon">🌬️</div>
+              <div>
+                <small>Wind Speed</small>
+                <strong id="wind">-- km/h</strong>
+              </div>
+            </div>
+
+            <div class="detail-item">
+              <div class="detail-icon">🌡️</div>
+              <div>
+                <small>Feels Like</small>
+                <strong id="feelsDetail">--°C</strong>
+              </div>
+            </div>
+
+            <div class="detail-item">
+              <div class="detail-icon">☁️</div>
+              <div>
+                <small>Cloud Cover</small>
+                <strong id="clouds">--%</strong>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- HOURLY -->
+      <section class="card forecast-card">
+        <div class="section-heading">
+          <div>
+            <span class="eyebrow">NEXT HOURS</span>
+            <h3>Hourly Forecast</h3>
+          </div>
+          <span class="section-tag">Upcoming hours</span>
+        </div>
+
+        <div id="hourlyForecast" class="hourly-list">
+          <div class="loading-state">Loading forecast...</div>
+        </div>
+      </section>
+
+      <!-- WEEKLY -->
+      <section class="card forecast-card">
+        <div class="section-heading">
+          <div>
+            <span class="eyebrow">COMING UP</span>
+            <h3>7-Day Forecast</h3>
+          </div>
+          <span class="section-tag">Weekly outlook</span>
+        </div>
+
+        <div id="dailyForecast" class="daily-list">
+          <div class="loading-state">Loading forecast...</div>
+        </div>
+      </section>
+
+      <footer class="dashboard-footer">
+        <div class="brand small-brand">
+          <span class="brand-icon">☁</span>
+          <span>SkyCast</span>
+        </div>
+        <span>Weather data powered by Open-Meteo</span>
+      </footer>
+    </main>
+  </section>
+
+  <!-- ADMIN DASHBOARD -->
+  <section id="adminPage" class="hidden app-page">
+    <header class="navbar">
+      <div class="brand">
+        <span class="brand-icon">☁</span>
+        <span>SkyCast <small class="admin-label">ADMIN</small></span>
+      </div>
+
+      <div class="nav-user">
+        <div class="user-avatar admin-avatar">A</div>
+        <span>Administrator</span>
+        <button class="logout-btn" onclick="logout()">Logout</button>
+      </div>
+    </header>
+
+    <main class="dashboard admin-dashboard">
+      <div class="welcome-row">
+        <div>
+          <span class="eyebrow">ADMINISTRATION</span>
+          <h1>Admin Dashboard</h1>
+          <p>Manage your SkyCast users and account information.</p>
+        </div>
+        <span class="admin-status">● System Online</span>
+      </div>
+
+      <div class="stats-grid">
+        <div class="stat-card card">
+          <div class="stat-icon blue">👥</div>
+          <small>Total Users</small>
+          <h2 id="totalUsers">0</h2>
+          <p>Registered accounts</p>
+        </div>
+
+        <div class="stat-card card">
+          <div class="stat-icon green">👤</div>
+          <small>Regular Users</small>
+          <h2 id="regularUsers">0</h2>
+          <p>Standard accounts</p>
+        </div>
+
+        <div class="stat-card card">
+          <div class="stat-icon purple">🛡️</div>
+          <small>Administrators</small>
+          <h2 id="adminUsers">0</h2>
+          <p>Admin accounts</p>
+        </div>
+      </div>
+
+      <section class="card users-card">
+        <div class="section-heading">
+          <div>
+            <span class="eyebrow">USER MANAGEMENT</span>
+            <h3>Registered Users</h3>
+          </div>
+          <input id="userSearch" class="table-search" placeholder="Search users..." oninput="filterUsers()">
+        </div>
+
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Role</th>
+              </tr>
+            </thead>
+            <tbody id="usersTable"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <footer class="dashboard-footer">
+        <div class="brand small-brand">
+          <span class="brand-icon">☁</span>
+          <span>SkyCast</span>
+        </div>
+        <span>Admin control panel</span>
+      </footer>
+    </main>
+  </section>
+
+  <script src="script.js"></script>
+</body>
+</html>
